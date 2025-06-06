@@ -1,0 +1,17 @@
+X2Modern Windows Build Information
+==================================
+
+Build Type: Cross-compiled Console Version
+Compiler: MinGW x86_64-w64-mingw32-g++
+Build Date: $(date)
+Platform: Windows x64
+
+This executable was cross-compiled on Linux and provides basic functionality.
+For full Qt5 WebEngine GUI features, build on Windows with Qt5 installed.
+
+Required for full version:
+- Qt5 (5.12 or later)
+- Qt5 WebEngine
+- Visual Studio or MinGW on Windows
+
+Source code and Windows build scripts are included in the release package.

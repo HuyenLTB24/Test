@@ -1,8 +1,0 @@
-/workspaces/Test/CMakeFiles/install/strip.dir
-/workspaces/Test/CMakeFiles/install/local.dir
-/workspaces/Test/CMakeFiles/install.dir
-/workspaces/Test/CMakeFiles/list_install_components.dir
-/workspaces/Test/CMakeFiles/rebuild_cache.dir
-/workspaces/Test/CMakeFiles/edit_cache.dir
-/workspaces/Test/CMakeFiles/X2Modern.dir
-/workspaces/Test/CMakeFiles/X2Modern_autogen.dir
