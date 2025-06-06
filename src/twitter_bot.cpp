@@ -22,6 +22,8 @@
 #include <QRandomGenerator>
 #include <QDebug>
 #include <QEventLoop>
+#include <QCryptographicHash>
+#include <QWebEngineProfile>
 
 TwitterBot::TwitterBot(const QVariantMap& credentials, QWidget* mainWindow, QObject* parent)
     : QObject(parent)

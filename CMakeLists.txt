@@ -46,12 +46,6 @@ set(HEADERS
     include/log_manager.h
     include/constants.h
 )
-    include/settings_manager.h
-    include/log_manager.h
-    include/ui/widgets.h
-    include/ui/dialogs.h
-    include/constants.h
-)
 
 # Create executable
 add_executable(X2Modern ${SOURCES} ${HEADERS})
