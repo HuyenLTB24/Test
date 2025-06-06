@@ -46,7 +46,7 @@ EQUALS = =
 CMAKE_SOURCE_DIR = /workspaces/Test
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /workspaces/Test
+CMAKE_BINARY_DIR = /workspaces/Test/build-release
 
 # Utility rule file for X2Modern_autogen.
 
@@ -54,8 +54,8 @@ CMAKE_BINARY_DIR = /workspaces/Test
 include CMakeFiles/X2Modern_autogen.dir/progress.make
 
 CMakeFiles/X2Modern_autogen:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/workspaces/Test/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Automatic MOC and UIC for target X2Modern"
-	/usr/bin/cmake -E cmake_autogen /workspaces/Test/CMakeFiles/X2Modern_autogen.dir/AutogenInfo.json Release
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/workspaces/Test/build-release/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Automatic MOC and UIC for target X2Modern"
+	/usr/bin/cmake -E cmake_autogen /workspaces/Test/build-release/CMakeFiles/X2Modern_autogen.dir/AutogenInfo.json Release
 
 X2Modern_autogen: CMakeFiles/X2Modern_autogen
 X2Modern_autogen: CMakeFiles/X2Modern_autogen.dir/build.make
@@ -72,6 +72,6 @@ CMakeFiles/X2Modern_autogen.dir/clean:
 .PHONY : CMakeFiles/X2Modern_autogen.dir/clean
 
 CMakeFiles/X2Modern_autogen.dir/depend:
-	cd /workspaces/Test && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /workspaces/Test /workspaces/Test /workspaces/Test /workspaces/Test /workspaces/Test/CMakeFiles/X2Modern_autogen.dir/DependInfo.cmake --color=$(COLOR)
+	cd /workspaces/Test/build-release && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /workspaces/Test /workspaces/Test /workspaces/Test/build-release /workspaces/Test/build-release /workspaces/Test/build-release/CMakeFiles/X2Modern_autogen.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/X2Modern_autogen.dir/depend
 

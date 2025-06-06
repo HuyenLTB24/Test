@@ -1,0 +1,41 @@
+X2Modern Twitter Bot Application - Release Build
+==============================================
+
+Version: 1.0.0
+Build Date: June 6, 2025
+Build Type: Release (Optimized)
+
+Application Details:
+- Executable: X2Modern
+- Size: 395KB (stripped)
+- Dependencies: Qt5 WebEngine, Qt5 Core, Qt5 Widgets, Qt5 Network, Qt5 SQL
+- Platform: Linux x86_64
+
+Features:
+- Twitter Bot with GUI interface
+- Qt5 WebEngine integration for web-based features
+- Database management for bot operations
+- Account management system
+- API integration for AI responses (Gemini/ChatGPT)
+- Comprehensive logging system
+
+Usage:
+./X2Modern
+
+Requirements:
+- Qt5 libraries (Core, Widgets, Network, SQL, WebEngine, WebEngineWidgets)
+- Linux environment with X11 or compatible display system
+- For headless operation: QT_QPA_PLATFORM=offscreen ./X2Modern
+
+Build Information:
+- Compiler: GCC 9.4.0
+- CMake: 3.16.3
+- Qt Version: 5.15.x
+- Optimizations: Enabled (-O2/-O3)
+- Debug symbols: Stripped
+
+Installation:
+1. Ensure Qt5 dependencies are installed
+2. Copy X2Modern executable to desired location
+3. Copy resources/ directory alongside executable
+4. Run: ./X2Modern
