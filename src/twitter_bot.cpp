@@ -38,7 +38,7 @@ TwitterBot::TwitterBot(const QVariantMap& credentials, QWidget* mainWindow, QObj
     , m_isPaused(false)
     , m_shouldStop(false)
     , m_forceStop(false)
-    , m_mode(TwitterConstants::BotMode::Feed)
+    , m_mode(TwitterConstants::BotMode::FEED_MODE)
     , m_useGemini(true)
     , m_timeLimitHours(24)
     , m_timeLimitMinutes(0)
@@ -53,11 +53,7 @@ TwitterBot::TwitterBot(const QVariantMap& credentials, QWidget* mainWindow, QObj
     m_profileId = credentials.value("profile_id").toString();
     
     // Setup database
-    m_database = new DatabaseManager(this);
-    if (!m_database->initialize()) {
-        emit errorSignal("Failed to initialize database");
-        return;
-    }
+    m_database = new DatabaseManager(m_mainWindow, this);
     
     // Load initial settings
     loadInitialSettings();
@@ -116,19 +112,19 @@ void TwitterBot::start()
     
     // Start appropriate mode
     switch (m_mode) {
-        case TwitterConstants::BotMode::Feed:
+        case TwitterConstants::BotMode::FEED_MODE:
             log("Starting Feed mode");
             m_feedTimer->start(m_interval * 1000);
             break;
-        case TwitterConstants::BotMode::User:
+        case TwitterConstants::BotMode::USER_MODE:
             log("Starting User mode");
             m_processTimer->start(m_interval * 1000);
             break;
-        case TwitterConstants::BotMode::Comments:
+        case TwitterConstants::BotMode::COMMENTS_MODE:
             log("Starting Comments mode");
             m_feedTimer->start(m_interval * 1000);
             break;
-        case TwitterConstants::BotMode::Trending:
+        case TwitterConstants::BotMode::TRENDING_MODE:
             log("Starting Trending mode");
             m_feedTimer->start(m_interval * 1000);
             break;
@@ -189,12 +185,12 @@ void TwitterBot::resume()
     
     // Restart timers based on mode
     switch (m_mode) {
-        case TwitterConstants::BotMode::Feed:
-        case TwitterConstants::BotMode::Comments:
-        case TwitterConstants::BotMode::Trending:
+        case TwitterConstants::BotMode::FEED_MODE:
+        case TwitterConstants::BotMode::COMMENTS_MODE:
+        case TwitterConstants::BotMode::TRENDING_MODE:
             m_feedTimer->start(m_interval * 1000);
             break;
-        case TwitterConstants::BotMode::User:
+        case TwitterConstants::BotMode::USER_MODE:
             m_processTimer->start(m_interval * 1000);
             break;
     }
@@ -239,12 +235,12 @@ void TwitterBot::updateSettings(const QVariantMap& settings)
         m_feedTimer->stop();
         
         switch (m_mode) {
-            case TwitterConstants::BotMode::Feed:
-            case TwitterConstants::BotMode::Comments:
-            case TwitterConstants::BotMode::Trending:
+            case TwitterConstants::BotMode::FEED_MODE:
+            case TwitterConstants::BotMode::COMMENTS_MODE:
+            case TwitterConstants::BotMode::TRENDING_MODE:
                 m_feedTimer->start(m_interval * 1000);
                 break;
-            case TwitterConstants::BotMode::User:
+            case TwitterConstants::BotMode::USER_MODE:
                 m_processTimer->start(m_interval * 1000);
                 break;
         }
@@ -385,16 +381,16 @@ QList<QJsonObject> TwitterBot::getRecentTweets(int maxTweets)
     // Navigate to appropriate page based on mode
     QString url;
     switch (m_mode) {
-        case TwitterConstants::BotMode::Feed:
+        case TwitterConstants::BotMode::FEED_MODE:
             url = "https://twitter.com/home";
             break;
-        case TwitterConstants::BotMode::Comments:
+        case TwitterConstants::BotMode::COMMENTS_MODE:
             url = QString("https://twitter.com/%1/with_replies").arg(m_username);
             break;
-        case TwitterConstants::BotMode::Trending:
+        case TwitterConstants::BotMode::TRENDING_MODE:
             url = "https://twitter.com/explore/tabs/trending";
             break;
-        case TwitterConstants::BotMode::User:
+        case TwitterConstants::BotMode::USER_MODE:
             // For user mode, we'll check specific users
             if (!m_targetUsers.isEmpty()) {
                 url = QString("https://twitter.com/%1").arg(m_targetUsers.first());
@@ -473,7 +469,7 @@ bool TwitterBot::processTweet(const QJsonObject& tweet)
                 tweetData["followed"] = followSuccess;
                 tweetData["retweeted"] = retweetSuccess;
                 
-                m_database->addRepliedTweet(m_username, tweetData);
+                m_database->addRepliedTweet(m_username, tweetId, username, replyText);
             }
             
             // Emit signal for UI update
@@ -713,7 +709,7 @@ void TwitterBot::processNextTweet()
         return;
     }
     
-    if (m_mode == TwitterConstants::BotMode::User && !m_targetUsers.isEmpty()) {
+    if (m_mode == TwitterConstants::BotMode::USER_MODE && !m_targetUsers.isEmpty()) {
         // Process specific users in user mode
         for (const QString& targetUser : m_targetUsers) {
             if (m_shouldStop || m_isPaused) {
@@ -770,7 +766,8 @@ bool TwitterBot::isOwnTweet(const QJsonObject& tweet)
 
 bool TwitterBot::isReplyTweet(const QJsonObject& tweet)
 {
-    return tweet.value("is_reply", false).toBool();
+    QJsonValue value = tweet.value("is_reply");
+    return value.isUndefined() ? false : value.toBool();
 }
 
 bool TwitterBot::shouldSkipTweet(const QJsonObject& tweet)
@@ -845,7 +842,7 @@ void TwitterBot::log(const QString& message)
     
     // Store in database
     if (m_database) {
-        m_database->addLog(m_username, "INFO", message);
+        m_database->addLog("INFO", "TwitterBot", m_username, message);
     }
 }
 
@@ -857,7 +854,7 @@ void TwitterBot::errorLog(const QString& message)
     
     // Store in database
     if (m_database) {
-        m_database->addLog(m_username, "ERROR", message);
+        m_database->addLog("ERROR", "TwitterBot", m_username, message);
     }
 }
 
@@ -903,7 +900,7 @@ void TwitterBot::loadInitialSettings()
         return;
     }
     
-    QVariantMap settings = m_database->getAccountSettings(m_username);
+    QVariantMap settings = m_database->getSettings(m_username);
     if (!settings.isEmpty()) {
         updateSettings(settings);
     }
@@ -915,7 +912,7 @@ bool TwitterBot::updateSettingsFromDB()
         return false;
     }
     
-    QVariantMap settings = m_database->getAccountSettings(m_username);
+    QVariantMap settings = m_database->getSettings(m_username);
     if (!settings.isEmpty()) {
         updateSettings(settings);
         return true;

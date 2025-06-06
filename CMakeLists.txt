@@ -5,8 +5,13 @@ project(X2Modern VERSION 1.0.0 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Find required Qt6 components
-find_package(Qt6 REQUIRED COMPONENTS 
+# Enable Qt MOC
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
+
+# Find required Qt5 components
+find_package(Qt5 REQUIRED COMPONENTS 
     Core 
     Widgets 
     Network
@@ -32,6 +37,8 @@ set(SOURCES
     src/database_manager.cpp
     src/account_manager.cpp
     src/bot_worker.cpp
+    src/api_manager.cpp
+    src/log_manager.cpp
 )
 
 # Header files
@@ -52,13 +59,13 @@ add_executable(X2Modern ${SOURCES} ${HEADERS})
 
 # Link libraries
 target_link_libraries(X2Modern
-    Qt6::Core
-    Qt6::Widgets
-    Qt6::Network
-    Qt6::Sql
-    Qt6::WebEngine
-    Qt6::WebEngineWidgets
-    Qt6::Concurrent
+    Qt5::Core
+    Qt5::Widgets
+    Qt5::Network
+    Qt5::Sql
+    Qt5::WebEngine
+    Qt5::WebEngineWidgets
+    Qt5::Concurrent
     ${CURL_LIBRARIES}
 )
 
@@ -72,8 +79,3 @@ file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/resources DESTINATION ${CMAKE_CURRENT_BINA
 install(TARGETS X2Modern
     RUNTIME DESTINATION bin
 )
-
-# Enable Qt MOC
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
-set(CMAKE_AUTOUIC ON)

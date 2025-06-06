@@ -31,7 +31,6 @@ AccountDialog::AccountDialog(DatabaseManager* database, const QString& profileId
     , m_database(database)
     , m_profileId(profileId)
     , m_isEditMode(!profileId.isEmpty())
-    , m_currentRow(-1)
 {
     setWindowTitle(m_isEditMode ? "Edit Account" : "Add Account");
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
@@ -298,7 +297,7 @@ void AccountDialog::onAccept()
     if (m_isEditMode) {
         success = m_database->updateAccount(m_profileId, accountData);
     } else {
-        success = m_database->addAccount(accountData);
+        success = m_database->createAccount(accountData);
     }
     
     if (success) {
@@ -539,7 +538,7 @@ void AccountManager::importAccounts()
         QJsonObject jsonObj = value.toObject();
         QVariantMap accountData = jsonObj.toVariantMap();
         
-        if (m_database->addAccount(accountData)) {
+        if (m_database->createAccount(accountData)) {
             imported++;
         }
     }

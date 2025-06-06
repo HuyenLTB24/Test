@@ -1,4 +1,5 @@
 #include "twitter_bot_gui.h"
+#include "twitter_bot.h"
 #include "database_manager.h"
 #include "bot_worker.h"
 #include "account_manager.h"
@@ -16,6 +17,7 @@
 #include <QUrl>
 #include <QBrush>
 #include <QColor>
+#include <QDebug>
 
 // Style constants
 const QString TwitterBotGUI::MAIN_STYLE = R"(
