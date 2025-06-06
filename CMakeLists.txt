@@ -32,12 +32,6 @@ set(SOURCES
     src/database_manager.cpp
     src/account_manager.cpp
     src/bot_worker.cpp
-    src/api_manager.cpp
-    src/browser_automation.cpp
-    src/settings_manager.cpp
-    src/log_manager.cpp
-    src/ui/widgets.cpp
-    src/ui/dialogs.cpp
 )
 
 # Header files
@@ -48,7 +42,10 @@ set(HEADERS
     include/account_manager.h
     include/bot_worker.h
     include/api_manager.h
-    include/browser_automation.h
+    include/settings_manager.h
+    include/log_manager.h
+    include/constants.h
+)
     include/settings_manager.h
     include/log_manager.h
     include/ui/widgets.h
